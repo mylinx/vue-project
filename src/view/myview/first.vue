@@ -47,17 +47,6 @@
             </el-row>
           </div>
 </template>
-<script>
-export default {
-   name:"first",
-   data(){
-     return{
-
-     }
-   }
-}
-</script>
-
 <style scoped>
     
 .page-content {

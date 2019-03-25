@@ -6,31 +6,14 @@ import Main from '@/view/Main'
 import aside from '@/view/iframe/aside'
 import Index from '@/view/compnents/index'
 import mymain from '@/view/myview/main' 
-import first from '@/view/myview/first' 
-import liuyan from '@/view/myview/liuyan' 
-import about from '@/view/myview/about' 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
       path: '/',
-      name: 'mymain',
-      component: mymain,
-      redirect:'/myview/first', 
-      children:[{ 
-        path:'/myview/first',
-        component:first
-      },
-      {
-        path:'/myview/liuyan',
-        component:liuyan
-      },
-      {
-        path:'/myview/about',
-        component:about
-      }
-      ]
+      name: 'Index',
+      component: mymain
     }
     // {
     //   path: '/',
