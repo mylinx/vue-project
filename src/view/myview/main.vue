@@ -13,21 +13,21 @@
         </div>
         <div class="header-common menu">
             <el-menu mode="horizontal">
-                <el-menu-item index="1" @click="clickBt">
-                    首页
+                <el-menu-item index="1">
+                    <router-link to="/myview/first"> 首页 </router-link>
                 </el-menu-item>
-                <el-menu-item index="2" @click="clickBt">
-                    留言
+                <el-menu-item index="2"> 
+                     <router-link to="/myview/liuyan"> 留言 </router-link>
                 </el-menu-item>
-                <el-menu-item index="3" @click="clickBt">
-                    关于
+                <el-menu-item index="3">
+                      <router-link to="/myview/about"> 关于 </router-link>
                 </el-menu-item>
             </el-menu>
         </div>
       </el-header>
       <el-container>
         <el-main>
-            <router-view></router-view>
+          <router-view></router-view>
         </el-main>
         <el-footer></el-footer>
       </el-container>
@@ -36,21 +36,17 @@
 </template>
 <script>
 import axios from "axios"; 
-import pagePent from '../myview/first'
 export default {
-  name: "",
-  components:{
-        "pagePent":pagePent
-  },
+  name: "mymain",
   data() {
     return {
       mes: "123123"
     };
   },
   mounted() {
-    axios.get("/api/values/Test1").then(res => {
-      this.mes = res.data;
-    });
+    // axios.get("/api/values/Test1").then(res => {
+    //   this.mes = res.data;
+    // });
   },
   methods: {
     clickBt: function() {
