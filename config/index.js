@@ -17,10 +17,13 @@ module.exports = {
         pathRewrite: {
           // /v2将代表target/v2 
           '^/api': '/api'
-        } 
-      } 
+        }
+      },
+      headers:{
+          'Authorization':"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6IjIzNDIzY2EtMzFhZi00YTZjLWFlMjYtY2Rzc2RmIiwiVXNlck5hbWUiOiIzaGFkbWluIiwiRW1haWwiOiIxMjE1MUBxcS5jb20iLCJuYmYiOjE1NTE5NDQxMDQsImV4cCI6MTU1MTk0NTkwNCwiaXNzIjoiaXNzdWVyIiwiYXVkIjoiYXVkaWVuY2UifQ.ABLoWynBqPJJYTulhrla6l44_P5L28_mvpvvnvqbp4E"
+      }
     },
-
+    
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
