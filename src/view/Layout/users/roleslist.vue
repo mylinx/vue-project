@@ -1,15 +1,19 @@
 <template>
-    <div>
-        <h1>这是用户信息页面</h1>
-    </div>
+    <h1> 这是角色页面 </h1> 
 </template>
 <script>
 export default {
-    name:'userPage',
+    name:'roleslist',
     data(){
         return{
-            
+
         }
     }
 }
 </script>
+<style scoped>
+
+</style>
+
+
+

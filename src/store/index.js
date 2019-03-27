@@ -16,7 +16,7 @@ export default  new Vuex.Store({
                 changeCount:0
             },
             getters:{
-                isShow1(state){
+                isShow1(state){ 
                     return  state.showFooter;
                 },
                 getChange1(){

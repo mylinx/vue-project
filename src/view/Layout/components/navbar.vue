@@ -4,6 +4,7 @@
     class="el-menu-vertical-demo"
     @open="handleOpen"
     @close="handleClose"
+    @select="handlSelect"
     unique-opened
     router
     background-color="#545c64"
@@ -13,56 +14,26 @@
     <el-submenu index="-1">
       <template slot="title">
         <i class="el-icon-menu"></i>
-        <span slot="title">商品管理</span>
+        <span slot="title">用户管理</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="Orders" @select="handlSelect">
+        <!-- <el-menu-item index="Orders" >
           <i class="el-icon-goods"/>
-          <span slot="title">订单列表</span>
-        </el-menu-item>
-        <el-menu-item index="1-2">选项2</el-menu-item>
-        <el-menu-item index="1-3">选项3</el-menu-item>
-        <el-menu-item index="1-4">选项4</el-menu-item>
+          <span slot="title">用户列表</span>
+        </el-menu-item> -->
+        <el-menu-item index="/userslist">用户列表</el-menu-item>
+        <el-menu-item index="/roleslist">用户角色</el-menu-item>
+        <el-menu-item index="/pessionslist">用户权限</el-menu-item>
       </el-menu-item-group>
-    </el-submenu>
-
-    <el-submenu index="-2">
-      <template slot="title">
-        <i class="el-icon-goods"/>
-        <span slot="title">订单管理</span>
-      </template>
-      <el-menu-item-group>
-        <el-menu-item index="2-1">选项1</el-menu-item>
-        <el-menu-item index="2-2">选项2</el-menu-item>
-      </el-menu-item-group>
-    </el-submenu>
-
-    <el-submenu index="-3" >
-      <template slot="title">
-        <i class="el-icon-picture-outline"/>
-        <span slot="title">数据分析</span>
-      </template>
-      <el-menu-item-group>
-        <el-menu-item index="3-1">选项1</el-menu-item>
-        <el-menu-item index="3-2">选项2</el-menu-item>
-      </el-menu-item-group>
-    </el-submenu>
-
-    <el-submenu index="-4">
-      <template slot="title">
-        <i class="el-icon-setting"/>
-        <span slot="title">系统设置</span>
-      </template>
-      <el-menu-item-group>
-        <el-menu-item index="4-1">选项1</el-menu-item>
-        <el-menu-item index="4-2">选项2</el-menu-item>
-      </el-menu-item-group>
-    </el-submenu>
+    </el-submenu> 
+        <!-- <el-menu-item  v-for="item in routes"  :key="item.path" :index="item.path"  >
+           {{ item.meta.title}}
+        </el-menu-item>    -->
   </el-menu>
 </template>
 
 <script>
-export default {
+export default { 
   methods: {
     handleOpen(key, keyPath) {
       //console.log(key, keyPath);
@@ -70,8 +41,22 @@ export default {
     handleClose(key, keyPath) {
       //console.log(key, keyPath);
     },
-    handlSelect(key) {}
-  }
+    handlSelect(key) { 
+        console.log(this.$router);
+        //console.log();
+        //this.$emit('childByValue',this.$router.history.current.meta.title );
+    }
+  },
+  data(){
+    return{
+      routes:[]
+    }
+  },
+  created(){
+    //  this.routes=JSON.parse("[{\"path\":\"/users1\",\"name\":\"userslist\",\"meta\":{\"title\":\"用户列表\",\"icon\":\"el-icon-setting\",\"roles\":\"['admin','kfadmin']\"}},{\"path\":\"/users2\",\"name\":\"userslist\",\"meta\":{\"title\":\"角色列表\",\"icon\":\"el-icon-setting\",\"roles\":\"['admin','kfadmin']\"}},{\"path\":\"/users3\",\"name\":\"userslist\",\"meta\":{\"title\":\"权限列表\",\"icon\":\"el-icon-setting\",\"roles\":\"['admin','kfadmin']\"}}]");
+    //  console.log(this.routes);
+     //console.log(this.routes);
+  } 
 };
 </script>
 <style scoped>

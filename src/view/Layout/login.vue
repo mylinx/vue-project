@@ -14,9 +14,10 @@ export default {
     methods:{
         cliRedired(){
             
+            // console.log(this.$store)
             //this.$router.
-             //console.log()
-            this.$router.push({path:'./header'})
+            //console.log()
+            this.$router.push({path:'/layout'})
         }
     }
 }

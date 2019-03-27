@@ -3,7 +3,7 @@
     <el-container>
       <el-header>
         <el-row>
-          <el-col :span="4">Take the Logo here!</el-col>
+          <el-col :span="4"> Sugar Operation System </el-col>
           <el-col :span="16">&nbsp;</el-col>
           <el-col :span="4">
             <el-row>
@@ -27,30 +27,14 @@
       </el-header>
       <el-container>
         <el-aside :style="{ height:absidHeight+'px',width:250+'px'}">
-          <navbar></navbar>
-          <!-- <el-menu>
-               <el-menu-item index="1">
-                     <i class="el-icon-menu"></i>
-                     <span slot="title">商品管理</span>
-               </el-menu-item>
-               
-               <el-menu-item index="2">
-                    <i class="el-icon-goods" />
-                    <span slot="title" > 订单管理 </span>
-               </el-menu-item> 
-
-                <el-menu-item index="3">
-                    <i class="el-icon-picture-outline"/>
-                   <span slot="title">数据分析</span> 
-               </el-menu-item> 
-
-                <el-menu-item  index="4">
-                   <i class="el-icon-setting"/>
-                   <span slot="title">系统设置</span>
-               </el-menu-item>  
-          </el-menu>-->
+          <navbar v-on:childByValue="childByValue"></navbar> 
         </el-aside>
         <el-main>
+          <el-breadcrumb separator="/">
+              <el-breadcrumb-item>首页</el-breadcrumb-item>
+              <el-breadcrumb-item>订单管理</el-breadcrumb-item>
+              <el-breadcrumb-item>{{ name }}</el-breadcrumb-item>
+          </el-breadcrumb>
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -63,7 +47,8 @@ export default {
   name: "layout",
   data() {
     return {
-      absidHeight: window.innerHeight - 60
+      absidHeight: window.innerHeight - 60,
+      name:''
     };
   },
   components: {
@@ -78,6 +63,11 @@ export default {
     //     location.reload() // 为了重新实例化vue-router对象 避免bug
     //   })
     // }
+     childByValue: function (childValue) {
+        // childValue就是子组件传过来的值
+        this.name = childValue;
+      } 
+    ,
     handleCommand(command) {
         if(command=="a"){
             this.$router.push({path:'/userinfo'})
@@ -85,6 +75,7 @@ export default {
     }
   },
   mounted() {
+
     this.absidHeight = window.innerHeight - 60;
     const that = this;
     window.onresize = function temp() {
