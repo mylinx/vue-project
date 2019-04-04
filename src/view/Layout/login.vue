@@ -21,7 +21,8 @@
     </el-form>
   </div>
 </template>
-<script>
+<script> 
+import { getToken,setToken,removeToken } from '@/until/auth'
 export default{
     name:'',
     data(){
@@ -40,11 +41,27 @@ export default{
                     data: this.loginform
                     }).then((res)=>{
                        if(res.status==200){
-                           if(res.data.verifiaction){
+                           if(res.data.verifiaction){ 
+                              setToken(res.data.rows.AccessToken)
+                              //  console.log(this.$store.getters.isShow1);
+                              //  this.$store.dispatch('hiDden') 
                                this.$router.push('/layout')
                            }
                        }
-                });
+                }); 
+        },
+        getMenu(){
+          this.$axios({
+                    method: 'get',
+                    url:'/api/Routers/GetPersion', 
+                    }).then((res)=>{
+                      console.log(res);
+                       if(res.status==200){
+                           if(res.data.verifiaction){
+                             console.log(res.data);
+                           }
+                       }
+                }); 
         }
     }
 }
@@ -71,7 +88,6 @@ $inpbg: #242f3c;
       padding: 12px 5px 12px 15px;
       background: $inpbg;
       &:-webkit-autofill {
-        -webkit-box-shadow: 0 0 0px 1000px $inpbg inset !important;
         -webkit-text-fill-color: $inpbg !important;
       }
     }

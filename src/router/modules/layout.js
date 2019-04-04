@@ -13,7 +13,7 @@ export default [
       {
         path: '/userslist',
         name: 'userslist',
-        component:()=>{ return import('@/view/Layout/users/userslist') }, 
+        component:()=>{ return import('@/view/Layout/users/user_components/userslist') }, 
         meta:{
             title:'用户列表',
             icon: 'el-icon-setting',
@@ -23,7 +23,7 @@ export default [
       {
         path: '/pessionslist',
         name: 'pessionslist',
-        component:()=>{ return import('@/view/Layout/users/pessionslist') }, 
+        component:()=>{ return import('@/view/Layout/users/perssion_components/pessionslist') }, 
         meta:{
             title:'权限列表',
             icon: 'el-icon-setting',
@@ -33,7 +33,7 @@ export default [
       {
         path: '/roleslist',
         name: 'roleslist',
-        component:()=>{ return import('@/view/Layout/users/roleslist') }, 
+        component:()=>{ return import('@/view/Layout/users/role_components/roleslist') }, 
         meta:{
             title:'角色列表',
             icon: 'el-icon-setting',

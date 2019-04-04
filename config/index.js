@@ -1,7 +1,6 @@
 'use strict'
 // Template version: 1.3.1
 // see http://vuejs-templates.github.io/webpack for documentation.
-
 const path = require('path')
 
 module.exports = {
@@ -20,7 +19,7 @@ module.exports = {
         }
       },
       headers:{
-          'Authorization':"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6IjIzNDIzY2EtMzFhZi00YTZjLWFlMjYtY2Rzc2RmIiwiVXNlck5hbWUiOiIzaGFkbWluIiwiRW1haWwiOiIxMjE1MUBxcS5jb20iLCJuYmYiOjE1NTE5NDQxMDQsImV4cCI6MTU1MTk0NTkwNCwiaXNzIjoiaXNzdWVyIiwiYXVkIjoiYXVkaWVuY2UifQ.ABLoWynBqPJJYTulhrla6l44_P5L28_mvpvvnvqbp4E"
+          'Authorization':"Bearer  "
       }
     },
     

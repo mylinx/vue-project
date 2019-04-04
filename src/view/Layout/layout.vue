@@ -3,37 +3,35 @@
     <el-container>
       <el-header>
         <el-row>
-          <el-col :span="4"> Sugar Operation System </el-col>
+          <el-col :span="4">Sugar Operation System</el-col>
           <el-col :span="16">&nbsp;</el-col>
           <el-col :span="4">
             <el-row>
               <el-col :span="24">
-                  <el-dropdown @command="handleCommand" >
-              <span class="el-dropdown-link">
-                个人中心
-                <i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown" >
-                <el-dropdown-item command="a">
-                  账号信息
-                </el-dropdown-item>
-                <el-dropdown-item command="b">退出登陆</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
+                <el-dropdown @command="handleCommand">
+                  <span class="el-dropdown-link">
+                    个人中心
+                    <i class="el-icon-arrow-down el-icon--right"></i>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item command="a">账号信息</el-dropdown-item>
+                    <el-dropdown-item command="b">退出登陆</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
               </el-col>
-            </el-row> 
+            </el-row>
           </el-col>
         </el-row>
       </el-header>
       <el-container>
         <el-aside :style="{ height:absidHeight+'px',width:250+'px'}">
-          <navbar v-on:childByValue="childByValue"></navbar> 
+          <navbar></navbar>
         </el-aside>
         <el-main>
           <el-breadcrumb separator="/">
-              <el-breadcrumb-item>首页</el-breadcrumb-item>
-              <el-breadcrumb-item>订单管理</el-breadcrumb-item>
-              <el-breadcrumb-item>{{ name }}</el-breadcrumb-item>
+            <el-breadcrumb-item>首页</el-breadcrumb-item>
+            <el-breadcrumb-item>订单管理</el-breadcrumb-item>
+            <el-breadcrumb-item>{{ name }}</el-breadcrumb-item>
           </el-breadcrumb>
           <router-view></router-view>
         </el-main>
@@ -43,39 +41,50 @@
 </template>
 <script>
 import navbar from "./components/navbar";
+import { getToken } from "@/until/auth";
 export default {
   name: "layout",
   data() {
     return {
       absidHeight: window.innerHeight - 60,
-      name:''
+      name: ""
     };
   },
   components: {
     navbar: navbar
   },
+  created() {
+    //console.log(this.$store.getters.isShow1);
+    this.initMenu();
+  },
+  mounted() {
+    // initMenu();
+  },
   methods: {
-    // toggleSideBar() {
-    //   this.$store.dispatch('ToggleSideBar')
-    // },
-    // logout() {
-    //   this.$store.dispatch('LogOut').then(() => {
-    //     location.reload() // 为了重新实例化vue-router对象 避免bug
-    //   })
-    // }
-     childByValue: function (childValue) {
-        // childValue就是子组件传过来的值
-        this.name = childValue;
-      } 
-    ,
+    childByValue: function(childValue) {
+      // childValue就是子组件传过来的值
+      this.name = childValue;
+    },
     handleCommand(command) {
-        if(command=="a"){
-            this.$router.push({path:'/userinfo'})
+      if (command == "a") {
+        this.$router.push({ path: "/userinfo" });
+      }
+    },
+    initMenu() {
+      this.$axios({
+        method: "get",
+        url: "/api/Routers/GetPersion",
+        headers: { Authorization: "Bearer  " + getToken() }
+      }).then(res => {
+        if (res.status == 200) {
+          if (res.data.verifiaction) {
+            //this.$store.commit("Add_Router", res.data.rows);
+          }
         }
+      });
     }
   },
   mounted() {
-
     this.absidHeight = window.innerHeight - 60;
     const that = this;
     window.onresize = function temp() {
@@ -98,7 +107,7 @@ export default {
   color: white;
 }
 
-.el-dropdown-menu{
+.el-dropdown-menu {
   top: 30px;
 }
 

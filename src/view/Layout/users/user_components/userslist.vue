@@ -7,8 +7,8 @@
         </el-form-item>
         <el-form-item label="活动区域">
             <el-select  placeholder="活动区域">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
+            <el-option label="区域一" value=""></el-option>
+            <el-option label="区域二" value=""></el-option>
             </el-select>
         </el-form-item>
         <el-form-item>
@@ -83,6 +83,18 @@ export default {
           address: '上海市普陀区金沙江路 1516 弄'
         }
         , {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }, {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }, {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }, {
           date: '2016-05-03',
           name: '王小虎',
           address: '上海市普陀区金沙江路 1516 弄'

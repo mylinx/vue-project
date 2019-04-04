@@ -10,30 +10,32 @@
     background-color="#545c64"
     text-color="#fff"
     active-text-color="#ffd04b"
-  >
-    <el-submenu index="-1">
-      <template slot="title">
-        <i class="el-icon-menu"></i>
-        <span slot="title">用户管理</span>
-      </template>
-      <el-menu-item-group>
-        <!-- <el-menu-item index="Orders" >
-          <i class="el-icon-goods"/>
-          <span slot="title">用户列表</span>
-        </el-menu-item> -->
-        <el-menu-item index="/userslist">用户列表</el-menu-item>
-        <el-menu-item index="/roleslist">用户角色</el-menu-item>
-        <el-menu-item index="/pessionslist">用户权限</el-menu-item>
-      </el-menu-item-group>
-    </el-submenu> 
-        <!-- <el-menu-item  v-for="item in routes"  :key="item.path" :index="item.path"  >
-           {{ item.meta.title}}
-        </el-menu-item>    -->
+  > 
+   <div  v-for="item  in menulist" :key="item.Id">
+       <el-submenu v-if="item.TreeChildren==null?  false: true "  :key="item.Id" :index="item.Id">
+            <template slot="title">
+            <i :class="item.Meta_icon==null? 'el-icon-news':item.Meta_icon"></i> 
+              <span slot="title">{{ item.Name }}</span>
+            </template>
+            <el-menu-item-group> 
+              <el-menu-item   v-for="(c_value,  c_index)  in item.TreeChildren" :key="c_index" :index="c_value.PathRouter">
+                    <i :class="c_value.Meta_icon==null? 'el-icon-news':c_value.Meta_icon"></i> 
+                    {{  c_value.Name }}
+              </el-menu-item>
+            </el-menu-item-group>
+      </el-submenu> 
+      <el-menu-item :index="item.Id"  v-else>
+          <i class="el-icon-menu"></i>
+          <span slot="title">
+             {{ item.Name}}
+          </span>
+      </el-menu-item> 
+   </div>
   </el-menu>
 </template>
-
 <script>
-export default { 
+import { getToken } from "@/until/auth";
+export default {  
   methods: {
     handleOpen(key, keyPath) {
       //console.log(key, keyPath);
@@ -42,21 +44,37 @@ export default {
       //console.log(key, keyPath);
     },
     handlSelect(key) { 
-        console.log(this.$router);
-        //console.log();
+        //console.log(this.$router); 
         //this.$emit('childByValue',this.$router.history.current.meta.title );
-    }
+    },
+     initMenu() {
+       //_that=this;
+      this.$axios({
+        method: "get",
+        url: "/api/Routers/GetPersion",
+        headers: { Authorization: "Bearer  " + getToken() }
+      }).then((res) => { 
+        if (res.status == 200) {
+          if (res.data.verifiaction) {
+            //this.$store.commit("Add_Router", res.data.rows);
+            this.menulist=res.data.rows;
+            localStorage.setItem('router',JSON.stringify(res.data.rows));
+          }
+        }
+      });  
+    } 
   },
   data(){
     return{
-      routes:[]
+       menulist:[]
     }
   },
-  created(){
-    //  this.routes=JSON.parse("[{\"path\":\"/users1\",\"name\":\"userslist\",\"meta\":{\"title\":\"用户列表\",\"icon\":\"el-icon-setting\",\"roles\":\"['admin','kfadmin']\"}},{\"path\":\"/users2\",\"name\":\"userslist\",\"meta\":{\"title\":\"角色列表\",\"icon\":\"el-icon-setting\",\"roles\":\"['admin','kfadmin']\"}},{\"path\":\"/users3\",\"name\":\"userslist\",\"meta\":{\"title\":\"权限列表\",\"icon\":\"el-icon-setting\",\"roles\":\"['admin','kfadmin']\"}}]");
-    //  console.log(this.routes);
-     //console.log(this.routes);
-  } 
+  created(){ 
+    this.initMenu();
+  },
+  mounted(){ 
+     
+  }
 };
 </script>
 <style scoped>

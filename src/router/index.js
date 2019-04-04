@@ -1,36 +1,55 @@
 import Vue from 'vue'
-import Router from 'vue-router' 
-import layout from './modules/layout' 
+import Router from 'vue-router'
+import layout from './modules/layout'
 //import store from '../store/index'
 
-Vue.use(Router) 
- 
-const routConfig= new Router({
-  mode:'history',
+Vue.use(Router)
+
+import { filterRouters } from './modules/common'
+const routConfig = new Router({
+  mode: 'history',
   routes: [
-  
-    ...layout, 
-    
-    //...users
-   
+
+    //...layout,
+    {
+      path: '/',
+      name: 'login',
+      component: () => import('@/view/'+item.path)
+    }
+    // {
+    //   path: '/*',
+    //   name: '/notfound',
+    //   component: () => { return import('@/view/Layout/notfound') }
+    // } 
   ]
 })
+ 
 
-
-
-routConfig.beforeEach((to,from,next)=>{
-  //console.log(...layout);
-  // let isLogin=false;
-  // if(isLogin)
-  // { 
-  //     console.log(222);
-  // }
-  // else{
-  //   console.log(this.$store);
-  //   console.log(111);
-  //   next();
-  // } 
+routConfig.beforeEach((to, from, next) => {
+  if(localStorage.getItem('router')!=null)
+  {
+    const routelist=JSON.parse(localStorage.getItem('router'));
+     //filterRouters(routelist);
+      
+     routelist.forEach((item)=>{ 
+        
+        if(item.TreeChildren!=null){
+          item.TreeChildren.forEach((item)=>{ 
+            let rot={
+              path:'',
+              name:'',
+              component:[]
+          };
+           rot.path=item.PathRouter
+           rot.name=item.Name
+           //rot.component= import('@/view/'+item.Component +'.vue')  
+             //routConfig.addRoutes(rot);
+          })
+        }
+     }); 
+    
+  }
   next()
 })
 
-export default   routConfig
+export default routConfig
