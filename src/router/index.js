@@ -5,7 +5,8 @@ import layout from './modules/layout'
 
 Vue.use(Router)
 
-import { filterRouters } from './modules/common'
+import { filterRouters } from './modules/common.js'
+import { filterRouterNotNullPaths } from "./modules/filterRouterNotNullPaths"; 
 const routConfig = new Router({
   mode: 'history',
   routes: [
@@ -14,42 +15,38 @@ const routConfig = new Router({
     {
       path: '/',
       name: 'login',
-      component: () => import('@/view/'+item.path)
+      component: () => import('@/view/Layout/login')
+    }, 
+    {
+      path: '/layout',
+      name: 'layout',
+      component: () => { return import('@/view/Layout/layout') },
     }
-    // {
-    //   path: '/*',
-    //   name: '/notfound',
-    //   component: () => { return import('@/view/Layout/notfound') }
-    // } 
-  ]
+  ], 
 })
- 
 
-routConfig.beforeEach((to, from, next) => {
-  if(localStorage.getItem('router')!=null)
-  {
-    const routelist=JSON.parse(localStorage.getItem('router'));
-     //filterRouters(routelist);
-      
-     routelist.forEach((item)=>{ 
-        
-        if(item.TreeChildren!=null){
-          item.TreeChildren.forEach((item)=>{ 
-            let rot={
-              path:'',
-              name:'',
-              component:[]
-          };
-           rot.path=item.PathRouter
-           rot.name=item.Name
-           //rot.component= import('@/view/'+item.Component +'.vue')  
-             //routConfig.addRoutes(rot);
-          })
-        }
-     }); 
-    
-  }
-  next()
-})
+  let rot=true;
+  routConfig.beforeEach((to,from,next)=>{
+    if(rot)
+    {
+       rot=false
+       next({ path:'/layout' });
+    }
+    else{
+       
+       next();
+    }
+    //console.log(JSON.parse(localStorage.getItem('router')))
+    // if(to.path==="/layout")  
+    // {
+    //     next();
+    // }
+    // else{
+    //   //   routConfig.addRoutes(JSON.parse(localStorage.getItem('router')))
+    //   // console.log('123');
+    //   // next({path:to.path});
+    //   next({path:'/login'});
+    // } 
+  })
 
 export default routConfig

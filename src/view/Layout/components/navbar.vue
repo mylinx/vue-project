@@ -24,7 +24,7 @@
               </el-menu-item>
             </el-menu-item-group>
       </el-submenu> 
-      <el-menu-item :index="item.Id"  v-else>
+      <el-menu-item :index="item.PathRouter"  v-else>
           <i class="el-icon-menu"></i>
           <span slot="title">
              {{ item.Name}}
@@ -35,6 +35,7 @@
 </template>
 <script>
 import { getToken } from "@/until/auth";
+import { filterRouterNotNullPaths } from "@/router/modules/filterRouterNotNullPaths";
 export default {  
   methods: {
     handleOpen(key, keyPath) {
@@ -54,11 +55,20 @@ export default {
         url: "/api/Routers/GetPersion",
         headers: { Authorization: "Bearer  " + getToken() }
       }).then((res) => { 
+         
         if (res.status == 200) {
+        
           if (res.data.verifiaction) {
             //this.$store.commit("Add_Router", res.data.rows);
             this.menulist=res.data.rows;
-            localStorage.setItem('router',JSON.stringify(res.data.rows));
+            if(localStorage.getItem('router'))
+            {
+                localStorage.removeItem('router');
+            }
+            const rout=filterRouterNotNullPaths(this.menulist);
+            this.$router.addRoutes(rout);
+
+            localStorage.setItem('router',JSON.stringify(rout));
           }
         }
       });  

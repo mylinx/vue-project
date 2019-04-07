@@ -45,6 +45,7 @@ export default{
                               setToken(res.data.rows.AccessToken)
                               //  console.log(this.$store.getters.isShow1);
                               //  this.$store.dispatch('hiDden') 
+                              // this.$router.addRoutes(filterRouterNotNullPaths(data));
                                this.$router.push('/layout')
                            }
                        }

@@ -40,10 +40,20 @@ export default [
             roles: ['admin','kfadmin']
         }
       },
-    {
-      path: '/*',
-      name: '/notfound',
-      component: () => { return import('@/view/Layout/notfound') }
-    } 
+      // {
+      //   path: '/test',
+      //   name: 'test',
+      //   component:()=>{ return import('@/view/Layout/test') }, 
+      //   meta:{
+      //       title:'角色列表',
+      //       icon: 'el-icon-setting',
+      //       roles: ['admin','kfadmin']
+      //   }
+      // },
+    // {
+    //   path: '/*',
+    //   name: '/notfound',
+    //   component: () => { return import('@/view/Layout/notfound') }
+    // } 
     ]
   }]
