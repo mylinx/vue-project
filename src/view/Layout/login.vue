@@ -45,7 +45,15 @@ export default{
                               setToken(res.data.rows.AccessToken)
                               //  console.log(this.$store.getters.isShow1);
                               //  this.$store.dispatch('hiDden') 
-                              // this.$router.addRoutes(filterRouterNotNullPaths(data));
+                               this.$router.addRoutes(
+                                 [
+                                   { 
+                                        path: '/layout',
+                                        name: 'layout',
+                                        component: () => { return import('@/view/Layout/layout') },
+                                   }
+                                 ]
+                               );
                                this.$router.push('/layout')
                            }
                        }

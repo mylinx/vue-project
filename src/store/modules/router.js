@@ -1,43 +1,19 @@
 export default {
     state: {
+        routerstate:true,
         menuRouter: [], //路由
     },
-
+    gettters:{
+        
+    },
     mutations: {
         //添加路由
-        Add_Router(state, data) { 
-            // data.forEach(element => {
-            //     if (element.TreeChildren) {
-            //         let rout = {};
-            //         element.TreeChildren.forEach(elm => {
-            //             rout = {
-            //                 path: elm.PathRouter,
-            //                 component: () => import('@/' + elm.Component)
-            //             }
-            //         })
-            //         state.menuRouter.push(rout);
-            //     }
-                
-                // if (element.TreeChildren) {
-                //     rout = {
-                //         path: element.PathRouter,
-                //         component: () => import('@/' + element.Component),
-                //         //children: this.Add_Router(state, element.TreeChildren)
-                //     } 
-                // } 
-                // else{
-                //     rout = {
-                //         path: element.PathRouter,
-                //         component: () => import('@/' + element.Component) 
-                //     } 
-                // }
-                //state.menuRouter = rout;
-            // });
+        Add_Router(state, data) {  
             state.menuRouter=data;
         },
-        //缓存菜单
-        GetMenu(state) {
-
+        //修改状态
+        changestate(state, value){
+            state.routerstate=value;
         }
     }
 }

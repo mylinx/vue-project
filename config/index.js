@@ -11,7 +11,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://localhost:53464', 
+        //target: 'http://www.suegar.cn', 
+        target: 'http://localhost:53464/', 
         changeOrigin: true,
         pathRewrite: {
           // /v2将代表target/v2 

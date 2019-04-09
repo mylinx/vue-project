@@ -49,7 +49,6 @@ export default {
         //this.$emit('childByValue',this.$router.history.current.meta.title );
     },
      initMenu() {
-       //_that=this;
       this.$axios({
         method: "get",
         url: "/api/Routers/GetPersion",
@@ -59,16 +58,15 @@ export default {
         if (res.status == 200) {
         
           if (res.data.verifiaction) {
-            //this.$store.commit("Add_Router", res.data.rows);
             this.menulist=res.data.rows;
-            if(localStorage.getItem('router'))
-            {
-                localStorage.removeItem('router');
-            }
-            const rout=filterRouterNotNullPaths(this.menulist);
-            this.$router.addRoutes(rout);
-
-            localStorage.setItem('router',JSON.stringify(rout));
+            // if(localStorage.getItem('router'))
+            // {
+            //     localStorage.removeItem('router');
+            // }
+            // const rout=filterRouterNotNullPaths(this.menulist);
+            // this.$router.addRoutes(rout);
+            
+            // localStorage.setItem('router',JSON.stringify(rout));
           }
         }
       });  

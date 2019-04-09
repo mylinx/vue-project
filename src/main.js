@@ -17,25 +17,4 @@ new Vue({
   store,
   axios,
   render: h => h(App)
-})
-
-
-router.beforeEach((to,from,next)=>{ 
-    next();
-    // console.log(to.path);
-    // if (localStorage.getItem('router')!=null) {
-    //     //router.addRoutes(JSON.parse(localStorage.getItem('router')))
-    //     next()
-    // }
-    // else{
-    //   console.log(2222);
-    //   if(to.path==='/layout')
-    //   {
-    //      next();
-    //   }
-    //   else{
-    //    next({path:'/login'})
-    //   }
-    // }
-
-})
+}) 

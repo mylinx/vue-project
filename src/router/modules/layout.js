@@ -40,6 +40,16 @@ export default [
             roles: ['admin','kfadmin']
         }
       },
+      {
+        path: '/test',
+        name: 'test',
+        component:()=>{ return import('@/view/Layout/test') }, 
+        meta:{
+            title:'系统设置',
+            icon: 'el-icon-setting',
+            roles: ['admin','kfadmin']
+        }
+      },
       // {
       //   path: '/test',
       //   name: 'test',
