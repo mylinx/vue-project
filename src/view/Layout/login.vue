@@ -43,18 +43,8 @@ export default{
                        if(res.status==200){
                            if(res.data.verifiaction){ 
                               setToken(res.data.rows.AccessToken)
-                              //  console.log(this.$store.getters.isShow1);
-                              //  this.$store.dispatch('hiDden') 
-                               this.$router.addRoutes(
-                                 [
-                                   { 
-                                        path: '/layout',
-                                        name: 'layout',
-                                        component: () => { return import('@/view/Layout/layout') },
-                                   }
-                                 ]
-                               );
-                               this.$router.push('/layout')
+                              this.$store.commit('getUsersInfo',res.data.rows.UserId);  
+                              this.$router.push({path:'/layout'});
                            }
                        }
                 }); 

@@ -1,20 +1,14 @@
 const users={
-    state:{
+    state:{ 
         userinfo:{
-            uid,
-            name,
-            roleid,
-            typeid
+            uid:''
         }
     },
     mutations:{
         getUsersInfo(state,data){
             if(data!=null)
             {
-                state.userinfo.uid=data.id;
-            }
-            else{
-                state.userinfo=null;
+                state.userinfo.uid=data;
             }
         }   
     },

@@ -15,7 +15,7 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item command="a">账号信息</el-dropdown-item>
-                    <el-dropdown-item command="b">退出登陆</el-dropdown-item>
+                    <el-dropdown-item command="loginout">退出登陆</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </el-col>
@@ -41,7 +41,7 @@
 </template>
 <script>
 import navbar from "./components/navbar";
-import { getToken } from "@/until/auth";
+import { getToken,removeToken } from "@/until/auth";
 export default {
   name: "layout",
   data() {
@@ -68,6 +68,24 @@ export default {
     handleCommand(command) {
       if (command == "a") {
         this.$router.push({ path: "/userinfo" });
+      }
+      if(command=="loginout")
+      {
+           this.$axios({
+              method: "post",
+              url: "/api/Home/LoginOut",
+              params:{
+                uid:12
+              },
+              headers: { Authorization: "Bearer  " + getToken() }
+            }).then(res => {
+              if (res.status == 200) {
+                if (res.data.verifiaction) {
+                      removeToken();
+                      this.$router.push({path:'/'});
+                }
+              }
+            });
       }
     },
     initMenu() {

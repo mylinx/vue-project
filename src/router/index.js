@@ -4,7 +4,7 @@ import layout from './modules/layout'
 //import store from '../store/index'
 
 Vue.use(Router)
-
+import { getToken } from "@/until/auth";
 import { filterRouters } from './modules/common.js'
 import { filterRouterNotNullPaths } from "./modules/filterRouterNotNullPaths"; 
 const routConfig = new Router({
@@ -24,5 +24,20 @@ const routConfig = new Router({
   ], 
 })
  
+routConfig.beforeEach((to,from,next)=>{
+  if(getToken()=='' || getToken()==undefined)
+  {
+     if(to.path=='/')
+      {
+         next();
+      }
+      else{
+          next({path:'/'})
+      }
+  }
+  else{
+    next();
+  }
+})
 
 export default routConfig
