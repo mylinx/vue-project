@@ -1,32 +1,13 @@
 <template>
   <div>
-      <div class="form-search">
-        <el-form :inline="true"   class="demo-form-inline">
-        <el-form-item label="审批人">
-            <el-input  placeholder="审批人"></el-input>
-        </el-form-item>
-        <el-form-item label="活动区域">
-            <el-select  placeholder="活动区域">
-            <el-option label="区域一" value=""></el-option>
-            <el-option label="区域二" value=""></el-option>
-            </el-select>
-        </el-form-item>
-        <el-form-item>
-            <el-button type="primary" >查询</el-button>
-        </el-form-item>
-        </el-form>
-      </div>
-    <el-table :data="tableData" 
-    height="500"
-    style="width: 100%;" 
-    >
-      <el-table-column label="日期" width="180">
+    <el-table :data="tableData" height="500" style="width: 100%;">
+      <el-table-column label="用户" width="180">
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
-          <span style="margin-left: 10px">{{ scope.row.date }}</span>
+          <span >{{ scope.row.UserName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="姓名" width="180">
+      <!-- <el-table-column label="姓名" width="180">
         <template slot-scope="scope">
           <el-popover trigger="hover" placement="top">
             <p>姓名: {{ scope.row.name }}</p>
@@ -42,81 +23,68 @@
           <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
           <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
         </template>
-      </el-table-column>
+      </el-table-column>-->
     </el-table>
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      @current-change="handlecurent"
+      :page-size="3"
+      :total="total">
+    </el-pagination>
   </div>
 </template>
 <script>
+import { getToken } from "@/until/auth";
 export default {
   name: "userslist",
   data() {
-    return { 
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
+    return {
+      tableData: [],
+      total:0,
+      currentpage:1
+    };
+  },
+  methods: {
+    handleEdit(index, row) {
+      console.log(index, row);
+    },
+    handleDelete(index, row) {
+      console.log(index, row);
+    },
+    handlecurent(pageIndex){ 
+      this.init(pageIndex)
+    },
+    init(pindex) { 
+      this.$axios({
+        method: "get",
+        url: "/api/UserSystem/GetUserList", 
+        params:{
+           pageIndex:pindex
+        },
+        headers: { Authorization: "Bearer  " + getToken() }
+      }).then(res => {
+        if (res.status == 200) {
+          if (res.data.verifiaction) {
+            if (res.data.rows.TotalCount > 0) {
+              this.tableData = res.data.rows.Items;
+              this.total=res.data.rows.TotalCount
+            }
+          }
         }
-        , {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
-        , {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
-        , {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
-        ]
+      });
     }
   },
-   methods: {
-      handleEdit(index, row) {
-        console.log(index, row);
-      },
-      handleDelete(index, row) {
-        console.log(index, row);
-      }
-    }
+  created() {
+    this.init(1);
+  }
 };
 </script>
 <style scoped>
-    .form-search{
-        height: 60px;
-        padding-top: 10px;
-        margin-top: 20px;
-        border: 1px solid #ccc;
-    }
+.form-search {
+  height: 60px;
+  padding-top: 10px;
+  margin-top: 20px;
+  border: 1px solid #ccc;
+}
 </style>
