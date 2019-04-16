@@ -4,12 +4,12 @@
       <el-form-item label="审批人">
         <el-input placeholder="审批人"></el-input>
       </el-form-item>
-      <el-form-item label="活动区域">
+      <!-- <el-form-item label="活动区域">
         <el-select  placeholder="活动区域">
           <el-option label="区域一" value="shanghai"></el-option>
           <el-option label="区域二" value="beijing"></el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button> 
       </el-form-item>   
@@ -59,7 +59,7 @@
     </el-pagination>
 
       <el-dialog :visible.sync="dialogTableVisible">
-         <adduser></adduser>
+         <adduser a="1"  @liseion="onSubmit"></adduser>
       </el-dialog> 
   </div> 
 </template>
@@ -92,7 +92,7 @@ export default {
       this.init(pageIndex)
     },
     onSubmit(){
-
+       console.log(111111111);
     },
     btnadd(){
       this.dialogTableVisible=true
