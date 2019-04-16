@@ -1,50 +1,86 @@
 <template>
   <div>
+    <el-form :inline="true" class="demo-form-inline">
+      <el-form-item label="审批人">
+        <el-input placeholder="审批人"></el-input>
+      </el-form-item>
+      <el-form-item label="活动区域">
+        <el-select  placeholder="活动区域">
+          <el-option label="区域一" value="shanghai"></el-option>
+          <el-option label="区域二" value="beijing"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">查询</el-button> 
+      </el-form-item>   
+      <el-form-item>
+          <el-button   type="success" @click="btnadd">新增</el-button>
+      </el-form-item>
+    </el-form>
     <el-table :data="tableData" height="500" style="width: 100%;">
       <el-table-column label="用户" width="180">
         <template slot-scope="scope">
-          <i class="el-icon-time"></i>
-          <span >{{ scope.row.UserName }}</span>
+          <span >{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="姓名" width="180">
+        <el-table-column label="角色" width="180">
         <template slot-scope="scope">
-          <el-popover trigger="hover" placement="top">
-            <p>姓名: {{ scope.row.name }}</p>
-            <p>住址: {{ scope.row.address }}</p>
-            <div slot="reference" class="name-wrapper">
-              <el-tag size="medium">{{ scope.row.name }}</el-tag>
-            </div>
-          </el-popover>
+          <span >{{ scope.row.rolename }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+        <el-table-column label="邮箱" width="180">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+          <span >{{ scope.row.email }}</span>
         </template>
-      </el-table-column>-->
+      </el-table-column>
+      <el-table-column label="备注" width="180">
+        <template slot-scope="scope">
+          <span >{{ scope.row.remark }}</span>
+        </template>
+      </el-table-column>
+       <el-table-column label="操作">
+       <template slot-scope="scope">
+          <el-button
+            size="mini"
+            @click="handleEdit(scope.row.id,scope.row)">编辑</el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            @click="handleDelete(scope.row.id,scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <el-pagination
       background
       layout="prev, pager, next"
       @current-change="handlecurent"
-      :page-size="3"
+      :page-size="psize"
       :total="total">
     </el-pagination>
-  </div>
+
+      <el-dialog :visible.sync="dialogTableVisible">
+         <adduser></adduser>
+      </el-dialog> 
+  </div> 
 </template>
 <script>
 import { getToken } from "@/until/auth";
+import adduser from "./adduser.vue"
 export default {
   name: "userslist",
   data() {
     return {
       tableData: [],
       total:0,
-      currentpage:1
-    };
+      psize:10,
+      currentpage:1,
+      dialogTableVisible:false
+    }
   },
+  components:{
+     "adduser":adduser
+  }
+  ,
   methods: {
     handleEdit(index, row) {
       console.log(index, row);
@@ -55,6 +91,13 @@ export default {
     handlecurent(pageIndex){ 
       this.init(pageIndex)
     },
+    onSubmit(){
+
+    },
+    btnadd(){
+      this.dialogTableVisible=true
+    }
+    ,
     init(pindex) { 
       this.$axios({
         method: "get",
@@ -66,9 +109,11 @@ export default {
       }).then(res => {
         if (res.status == 200) {
           if (res.data.verifiaction) {
-            if (res.data.rows.TotalCount > 0) {
-              this.tableData = res.data.rows.Items;
-              this.total=res.data.rows.TotalCount
+            if (res.data.rows.total > 0) {
+            
+              this.tableData = res.data.rows.items;
+              this.total=res.data.rows.total
+              this.psize=res.data.rows.pagesize;
             }
           }
         }
@@ -86,5 +131,9 @@ export default {
   padding-top: 10px;
   margin-top: 20px;
   border: 1px solid #ccc;
+}
+
+.demo-form-inline{
+   margin-top: 20px;
 }
 </style>
