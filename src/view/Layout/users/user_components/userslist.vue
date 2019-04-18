@@ -58,7 +58,7 @@
       :total="total">
     </el-pagination>
 
-      <el-dialog :visible.sync="dialogTableVisible">
+      <el-dialog :visible.sync="dialogTableVisible" title="新增账号" >
          <adduser a="1"  @liseion="onSubmit"></adduser>
       </el-dialog> 
   </div> 

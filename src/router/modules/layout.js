@@ -4,6 +4,7 @@ export default [
     path: '/',
     name: 'login',
     component: () => import('@/view/Layout/login')
+    //component:()=>{ return import('@/view/Layout/users/user_components/adduser') }, 
   },
   {
     path: '/layout',
