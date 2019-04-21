@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-form :inline="true" class="demo-form-inline">
-      <el-form-item label="审批人">
-        <el-input placeholder="审批人"></el-input>
+      <el-form-item label="用户名">
+        <el-input placeholder="用户名"  v-model="userinfo.username" ></el-input>
       </el-form-item>
       <!-- <el-form-item label="活动区域">
         <el-select  placeholder="活动区域">
@@ -11,13 +11,17 @@
         </el-select>
       </el-form-item> -->
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">查询</el-button> 
+        <el-button type="primary" @click="onSearch">查询</el-button> 
       </el-form-item>   
       <el-form-item>
           <el-button   type="success" @click="btnadd">新增</el-button>
       </el-form-item>
     </el-form>
-    <el-table :data="tableData" height="500" style="width: 100%;">
+    <el-table 
+    :data="tableData" 
+    height="500" 
+    style="width: 100%;"
+    >
       <el-table-column label="用户" width="180">
         <template slot-scope="scope">
           <span >{{ scope.row.name }}</span>
@@ -39,7 +43,7 @@
         </template>
       </el-table-column>
        <el-table-column label="操作">
-       <template slot-scope="scope">
+       <template slot-scope="scope"> 
           <el-button
             size="mini"
             @click="handleEdit(scope.row.id,scope.row)">编辑</el-button>
@@ -58,8 +62,8 @@
       :total="total">
     </el-pagination>
 
-      <el-dialog :visible.sync="dialogTableVisible" title="新增账号" >
-         <adduser a="1"  @liseion="onSubmit"></adduser>
+      <el-dialog :visible.sync="dialogTableVisible">
+         <adduser a="1"  @liseion="onSearch"></adduser>
       </el-dialog> 
   </div> 
 </template>
@@ -70,6 +74,10 @@ export default {
   name: "userslist",
   data() {
     return {
+      userinfo:{
+        username:'',
+        roleid:''
+      },
       tableData: [],
       total:0,
       psize:10,
@@ -90,9 +98,10 @@ export default {
     },
     handlecurent(pageIndex){ 
       this.init(pageIndex)
-    },
-    onSubmit(){
-       console.log(111111111);
+    }, 
+    onSearch(){
+      this.init();
+       this.dialogTableVisible=false
     },
     btnadd(){
       this.dialogTableVisible=true
@@ -103,7 +112,8 @@ export default {
         method: "get",
         url: "/api/UserSystem/GetUserList", 
         params:{
-           pageIndex:pindex
+           pageIndex:pindex,
+           userName:this.userinfo.username
         },
         headers: { Authorization: "Bearer  " + getToken() }
       }).then(res => {

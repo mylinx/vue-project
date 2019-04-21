@@ -69,6 +69,8 @@ export default {
         }
       });
     },
+
+    //获取角色列表
     getRoles() {
       this.$axios({
         method: "get",
@@ -83,8 +85,10 @@ export default {
         }
       });
     },
-    addUser() {
-      console.log(123);
+
+    //新增用户
+    addUser() { 
+      const _that=this;
       this.$axios({
         method: "post",
         url: "/api/UserSystem/addUser",
@@ -93,16 +97,24 @@ export default {
           PassWord: this.userinfo.password,
           UserName: this.userinfo.username,
           Email: this.userinfo.email,
-          IsLock: this.userinfo.isLock
+          IsLock:this.userinfo.isLock==true?1:0,
+          //Remark:this.userinfo.Remark
         },
         headers: { Authorization: "Bearer  " + getToken() }
       }).then(res => {
         if (res.status == 200) {
-          if (res.data.verifiaction) {
+          if (res.data.verifiaction) { 
             this.$message({
               message: "添加成功!",
-              type: "success"
-            });
+              type: "success",
+              duration:1000,
+              onClose:()=>{ 
+                this.userinfo.username='';
+                this.userinfo.password='';
+                this.userinfo.email='';
+                this.$emit("liseion");
+              }
+            }); 
           } else {
             this.$message.error(res.data.message);
           }
