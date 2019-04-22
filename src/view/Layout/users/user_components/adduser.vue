@@ -4,7 +4,7 @@
       <el-input type="text" :value="userinfo.username" :disabled="inputdisabled"  v-model="userinfo.username"></el-input>
     </el-form-item>
     <el-form-item label="密码">
-      <el-input placeholder="请输入密码" v-model="userinfo.password" :disabled="inputdisabled" show-password="true"></el-input>
+      <el-input placeholder="请输入密码" v-model="userinfo.password" :disabled="inputdisabled" ></el-input>
     </el-form-item>
     <el-form-item label="所属角色">
       <el-select v-model="userinfo.roleid" placeholder="请选择">
@@ -87,16 +87,13 @@ export default {
           }
         }
       });
-    },
-
-    //新增用户
+    },  
+    //新增.更新用户
     addOrUpdateUser() {
       const _that = this;
-      var url='';
+      var url=''; 
       if(this.userinfo.id!='')
       {
-         this.inputdisabled=true; 
-         console.log(this.inputdisabled);
          url="/api/UserSystem/updateUser";
       }
       else{
@@ -129,8 +126,18 @@ export default {
                 this.$emit("liseion");
               }
             });
-          } else {
-            this.$message.error(res.data.message);
+          } else { 
+             this.$message({
+              message: res.data.message,
+              type: "error",
+              duration: 1000,
+              onClose: () => {
+                this.userinfo.username = "";
+                this.userinfo.password = "";
+                this.userinfo.email = "";
+                this.$emit("liseion");
+              }
+            });
           }
         }
       });
