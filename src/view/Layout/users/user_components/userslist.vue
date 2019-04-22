@@ -14,7 +14,7 @@
         <el-button type="primary" @click="onSearch">查询</el-button> 
       </el-form-item>   
       <el-form-item>
-          <el-button   type="success" @click="btnadd">新增</el-button>
+          <el-button   type="success" @click="showDialog">新增</el-button>
       </el-form-item>
     </el-form>
     <el-table 
@@ -62,8 +62,10 @@
       :total="total">
     </el-pagination>
 
-      <el-dialog :visible.sync="dialogTableVisible">
-         <adduser a="1"  @liseion="onSearch"></adduser>
+      <el-dialog :visible="dialogTableVisible"
+      :before-close="closeWin"
+      >
+         <adduser ref="users" :uid="userinfo.id"  @liseion="onSearch"></adduser>
       </el-dialog> 
   </div> 
 </template>
@@ -75,6 +77,7 @@ export default {
   data() {
     return {
       userinfo:{
+        id:'',
         username:'',
         roleid:''
       },
@@ -87,24 +90,44 @@ export default {
   },
   components:{
      "adduser":adduser
-  }
-  ,
+  },
   methods: {
-    handleEdit(index, row) {
-      console.log(index, row);
+    handleEdit(index, row) {   
+        setTimeout(() => {
+           this.$refs.users.getUserModel(row.id);
+        }, 10);
+        
+       this.dialogVisible();
     },
-    handleDelete(index, row) {
-      console.log(index, row);
+    handleDelete(index, row) { 
+        setTimeout(() => {
+           this.$refs.users.getUserModel(row.id);
+        }, 10);
+        
+        this.dialogVisible();
     },
     handlecurent(pageIndex){ 
       this.init(pageIndex)
     }, 
     onSearch(){
-      this.init();
-       this.dialogTableVisible=false
+       this.init(1);
+       this.closeWin();
     },
-    btnadd(){
+    showDialog(){
+      setTimeout(() => { 
+        this.$refs.users.userinfo.id='';
+        this.$refs.users.userinfo.username='';
+        this.$refs.users.userinfo.email='';
+        this.$refs.users.userinfo.password=''; 
+        this.$refs.users.userinfo.isLock=0;
+      }, 10);
       this.dialogTableVisible=true
+    },
+    dialogVisible(){
+        this.dialogTableVisible=true
+    },
+    closeWin(){
+       this.dialogTableVisible=false
     }
     ,
     init(pindex) { 
@@ -120,7 +143,6 @@ export default {
         if (res.status == 200) {
           if (res.data.verifiaction) {
             if (res.data.rows.total > 0) {
-            
               this.tableData = res.data.rows.items;
               this.total=res.data.rows.total
               this.psize=res.data.rows.pagesize;

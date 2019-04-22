@@ -1,10 +1,10 @@
 <template>
   <el-form ref="userinfo" :model="userinfo" :rules="rules" label-width="80px">
     <el-form-item label="账号" prop="username">
-      <el-input type="text" :value="userinfo.username" v-model="userinfo.username"></el-input>
+      <el-input type="text" :value="userinfo.username" :disabled="inputdisabled"  v-model="userinfo.username"></el-input>
     </el-form-item>
     <el-form-item label="密码">
-      <el-input placeholder="请输入密码" v-model="userinfo.password" show-password></el-input>
+      <el-input placeholder="请输入密码" v-model="userinfo.password" :disabled="inputdisabled" show-password="true"></el-input>
     </el-form-item>
     <el-form-item label="所属角色">
       <el-select v-model="userinfo.roleid" placeholder="请选择">
@@ -26,7 +26,9 @@
 import { getToken } from "@/until/auth";
 export default {
   name: "adduser",
-  props: ["a"],
+  props: {
+    uid: String
+  },
   data() {
     return {
       userinfo: {
@@ -35,8 +37,9 @@ export default {
         password: "",
         roleid: "1",
         email: "",
-        isLock: 1
+        isLock: true
       },
+      inputdisabled:false,
       roles: [],
       rules: {
         username: [
@@ -57,13 +60,13 @@ export default {
   },
   created() {
     this.getRoles();
+    //this.getUserModel();
   },
   methods: {
     onSubmit(formdata) {
       this.$refs[formdata].validate(valid => {
         if (valid) {
-          this.addUser();
-          //this.$emit("liseion");
+          this.addOrUpdateUser();
         } else {
           return false;
         }
@@ -87,36 +90,66 @@ export default {
     },
 
     //新增用户
-    addUser() { 
-      const _that=this;
+    addOrUpdateUser() {
+      const _that = this;
+      var url='';
+      if(this.userinfo.id!='')
+      {
+         this.inputdisabled=true; 
+         console.log(this.inputdisabled);
+         url="/api/UserSystem/updateUser";
+      }
+      else{
+           url="/api/UserSystem/addUser";
+      }
+      
       this.$axios({
         method: "post",
-        url: "/api/UserSystem/addUser",
+        url: url,
         data: {
+          ID:this.userinfo.id,
           RoleID: this.userinfo.roleid,
           PassWord: this.userinfo.password,
           UserName: this.userinfo.username,
           Email: this.userinfo.email,
-          IsLock:this.userinfo.isLock==true?1:0,
-          //Remark:this.userinfo.Remark
+          IsLock: this.userinfo.isLock == true ? 1 : 0
         },
         headers: { Authorization: "Bearer  " + getToken() }
       }).then(res => {
         if (res.status == 200) {
-          if (res.data.verifiaction) { 
+          if (res.data.verifiaction) {
             this.$message({
               message: "添加成功!",
               type: "success",
-              duration:1000,
-              onClose:()=>{ 
-                this.userinfo.username='';
-                this.userinfo.password='';
-                this.userinfo.email='';
+              duration: 1000,
+              onClose: () => {
+                this.userinfo.username = "";
+                this.userinfo.password = "";
+                this.userinfo.email = "";
                 this.$emit("liseion");
               }
-            }); 
+            });
           } else {
             this.$message.error(res.data.message);
+          }
+        }
+      });
+    },
+    getUserModel(uid) {
+      this.$axios({
+        method: "get",
+        url: "/api/UserSystem/detailsUser",
+        params: {
+          id: uid
+        },
+        headers: { Authorization: "Bearer  " + getToken() }
+      }).then(res => {
+        if (res.status == 200) {
+          if (res.data.verifiaction) {
+              this.userinfo.roleid = res.data.rows.roleid;
+              this.userinfo.id = res.data.rows.id;
+              this.userinfo.email = res.data.rows.email;
+              this.userinfo.username=res.data.rows.username;
           }
         }
       });
