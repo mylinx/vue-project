@@ -1,10 +1,15 @@
 <template>
   <el-form ref="userinfo" :model="userinfo" :rules="rules" label-width="80px">
     <el-form-item label="账号" prop="username">
-      <el-input type="text" :value="userinfo.username" :disabled="inputdisabled"  v-model="userinfo.username"></el-input>
+      <el-input
+        type="text"
+        :value="userinfo.username"
+        :disabled="inputdisabled"
+        v-model="userinfo.username"
+      ></el-input>
     </el-form-item>
     <el-form-item label="密码">
-      <el-input placeholder="请输入密码" v-model="userinfo.password" :disabled="inputdisabled" ></el-input>
+      <el-input placeholder="请输入密码" v-model="userinfo.password" :disabled="inputdisabled"></el-input>
     </el-form-item>
     <el-form-item label="所属角色">
       <el-select v-model="userinfo.roleid" placeholder="请选择">
@@ -24,6 +29,7 @@
 </template>
 <script>
 import { getToken } from "@/until/auth";
+import * as users from "@/api/users";
 export default {
   name: "adduser",
   props: {
@@ -39,7 +45,7 @@ export default {
         email: "",
         isLock: true
       },
-      inputdisabled:false,
+      inputdisabled: false,
       roles: [],
       rules: {
         username: [
@@ -59,8 +65,13 @@ export default {
     };
   },
   created() {
+    //console.log(this.$refs['userinfo']);
+    //.resetFields();
     this.getRoles();
-    //this.getUserModel();
+  },
+
+  mounted() {
+    //this.$refs['userinfo'].resetFields();
   },
   methods: {
     onSubmit(formdata) {
@@ -77,8 +88,7 @@ export default {
     getRoles() {
       this.$axios({
         method: "get",
-        url: "/api/UserSystem/GetRoles",
-        headers: { Authorization: "Bearer  " + getToken() }
+        url: "/UserSystem/GetRoles"
       }).then(res => {
         if (res.status == 200) {
           if (res.data.verifiaction) {
@@ -87,79 +97,96 @@ export default {
           }
         }
       });
-    },  
+    },
     //新增.更新用户
     addOrUpdateUser() {
       const _that = this;
-      var url=''; 
-      if(this.userinfo.id!='')
-      {
-         url="/api/UserSystem/updateUser";
+      var url = "";
+      if (this.userinfo.id != "") {
+        url = "/UserSystem/updateUser";
+      } else {
+        url = "/UserSystem/addUser";
       }
-      else{
-           url="/api/UserSystem/addUser";
-      }
-      
-      this.$axios({
-        method: "post",
-        url: url,
-        data: {
-          ID:this.userinfo.id,
-          RoleID: this.userinfo.roleid,
-          PassWord: this.userinfo.password,
-          UserName: this.userinfo.username,
-          Email: this.userinfo.email,
-          IsLock: this.userinfo.isLock == true ? 1 : 0
-        },
-        headers: { Authorization: "Bearer  " + getToken() }
-      }).then(res => {
-        if (res.status == 200) {
-          if (res.data.verifiaction) {
-            this.$message({
-              message: "添加成功!",
-              type: "success",
-              duration: 1000,
-              onClose: () => {
-                this.userinfo.username = "";
-                this.userinfo.password = "";
-                this.userinfo.email = "";
-                this.$emit("liseion");
-              }
-            });
-          } else { 
-             this.$message({
-              message: res.data.message,
-              type: "error",
-              duration: 1000,
-              onClose: () => {
-                this.userinfo.username = "";
-                this.userinfo.password = "";
-                this.userinfo.email = "";
-                this.$emit("liseion");
-              }
-            });
+
+      const data = {
+        ID: this.userinfo.id,
+        RoleID: this.userinfo.roleid,
+        PassWord: this.userinfo.password,
+        UserName: this.userinfo.username,
+        Email: this.userinfo.email,
+        IsLock: this.userinfo.isLock == true ? 1 : 0
+      };
+      users
+        .useredit(data, url)
+        .then(res => {
+          if (res.status == 200) {
+            if (res.data.verifiaction) {
+              this.$message({
+                message: res.data.message,
+                type: "success",
+                duration: 1000,
+                onClose: () => {
+                  this.userinfo.username = "";
+                  this.userinfo.password = "";
+                  this.userinfo.email = "";
+                  this.$emit("liseion");
+                }
+              });
+            } else {
+              this.$message({
+                message: res.data.message,
+                type: "error",
+                duration: 1000,
+                onClose: () => {
+                  this.userinfo.username = "";
+                  this.userinfo.password = "";
+                  this.userinfo.email = "";
+                  this.$emit("liseion");
+                }
+              });
+            }
           }
-        }
-      });
+        })
+        .catch(erro => {});
     },
     getUserModel(uid) {
-      this.$axios({
-        method: "get",
-        url: "/api/UserSystem/detailsUser",
-        params: {
-          id: uid
-        },
-        headers: { Authorization: "Bearer  " + getToken() }
-      }).then(res => {
-        if (res.status == 200) {
-          if (res.data.verifiaction) {
+      const params = {
+        id: uid
+      };
+      users
+        .userdetails(params)
+        .then(res => {
+          if (res.status == 200) {
+            if (res.data.verifiaction) {
+              
               this.userinfo.roleid = res.data.rows.roleid;
               this.userinfo.id = res.data.rows.id;
               this.userinfo.email = res.data.rows.email;
-              this.userinfo.username=res.data.rows.username;
+              this.userinfo.username = res.data.rows.username;
+              this.userinfo.isLock = true//res.data.rows.islock == 1 ? true : false;
+            }
           }
-        }
-      });
+        })
+        .catch(erro => {
+
+        });
+      // this.$axios({
+      //   method: "get",
+      //   url: "/UserSystem/detailsUser",
+      //   params: {
+      //     id: uid
+      //   }
+      // }).then(res => {
+      //   if (res.status == 200) {
+      //     if (res.data.verifiaction) {
+      //       this.userinfo.roleid = res.data.rows.roleid;
+      //       this.userinfo.id = res.data.rows.id;
+      //       this.userinfo.email = res.data.rows.email;
+      //       this.userinfo.username = res.data.rows.username;
+      //       this.userinfo.isLock = res.data.rows.islock == 1 ? true : false;
+      //     }
+      //   }
+      // });
     }
   }
 };

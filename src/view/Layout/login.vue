@@ -2,7 +2,7 @@
   <div class="login-container">
     <el-form class="login-form" auto-complete="on" label-position="left">
       <div class="title-container">
-        <h3 class="title"  ></h3>
+        <h3 class="title"></h3>
       </div>
       <el-form-item>
         <span class="svg-container">
@@ -16,54 +16,37 @@
         </span>
         <el-input type="text" auto-complete="on" name="password" v-model="loginform.password"/>
       </el-form-item>
-      <el-button type="primary" @click="loginhandle"  >登陆</el-button>
+      <el-button type="primary" @click="loginhandle">登陆</el-button>
       <el-button type="success">注册账号</el-button>
     </el-form>
   </div>
 </template>
-<script> 
-import { getToken,setToken,removeToken } from '@/until/auth'
-export default{
-    name:'',
-    data(){
-        return {
-            loginform:{
-                name:'',
-                password:''
-            }
-        }
-    },
-    methods:{
-        loginhandle(){
-             this.$axios({
-                    method: 'post',
-                    url:'/api/Home/GetToken',
-                    data: this.loginform
-                    }).then((res)=>{
-                       if(res.status==200){
-                           if(res.data.verifiaction){ 
-                              setToken(res.data.rows.AccessToken)
-                              this.$store.commit('getUsersInfo',res.data.rows.UserId);  
-                              this.$router.push({path:'/layout'});
-                           }
-                       }
-                }); 
-        },
-        getMenu(){
-          this.$axios({
-                    method: 'get',
-                    url:'/api/Routers/GetPersion', 
-                    }).then((res)=>{
-                      console.log(res);
-                       if(res.status==200){
-                           if(res.data.verifiaction){
-                             console.log(res.data);
-                           }
-                       }
-                }); 
-        }
+<script>
+import { setToken } from "@/until/auth";
+import { mapActions } from "vuex";
+export default {
+  name: "",
+  data() {
+    return {
+      loginform: {
+        name: "",
+        password: ""
+      }
+    };
+  },
+  methods: {
+    loginhandle() {
+      this.$store
+        .dispatch("loginSystem", this.loginform)
+        .then(res => { 
+          this.$router.push({ path: "/layout" });
+        })
+        .catch(erro => {
+          console.log(erro);
+        });
     }
-}
+  }
+};
 </script> 
 <style rel="stylesheet/scss" lang="scss" >
 $bg: #283443;
@@ -110,7 +93,7 @@ $inpbg: #242f3c;
   }
 
   .el-input {
-      border-radius: 5px;
+    border-radius: 5px;
   }
   .svg-container {
     vertical-align: middle;

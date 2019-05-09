@@ -3,12 +3,19 @@ export default [
   {
     path: '/',
     name: 'login',
-    component: () => import('@/view/Layout/login')
-    //component:()=>{ return import('@/view/Layout/users/user_components/adduser') }, 
+    component: () => import('@/view/Layout/login'),
+    meta:{
+       isLogin:false,
+       role:['admin','user']
+    }
   },
   {
     path: '/layout',
     name: 'layout',
+    meta:{
+      isLogin:false,
+      role:['admin','user']
+    },
     component: () => { return import('@/view/Layout/layout') },
     children: [
       {

@@ -1,9 +1,9 @@
 <template>
   <div>
-    <el-form :inline="true" class="demo-form-inline">
+    <el-form :inline="true" class="demo-form-inline" >
       <el-form-item label="用户名">
         <el-input placeholder="用户名" v-model="userinfo.username"></el-input>
-      </el-form-item> 
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSearch">查询</el-button>
       </el-form-item>
@@ -43,10 +43,10 @@
       background
       layout="prev, pager, next"
       @current-change="handlecurent"
+      :current-page	='currentpage'
       :page-size="psize"
       :total="total"
     ></el-pagination>
-
     <el-dialog :visible.sync="dialogTableVisible">
       <adduser ref="users" :uid="userinfo.id" @liseion="onSearch"></adduser>
     </el-dialog>
@@ -55,6 +55,7 @@
 <script>
 import { getToken } from "@/until/auth";
 import adduser from "./adduser.vue";
+import * as users from "@/api/users";
 export default {
   name: "userslist",
   data() {
@@ -67,7 +68,7 @@ export default {
       tableData: [],
       total: 0,
       psize: 10,
-      currentpage: 1,
+      currentpage:1,
       dialogTableVisible: false
     };
   },
@@ -77,25 +78,21 @@ export default {
   methods: {
     handleEdit(index, row) {
       setTimeout(() => {
-        this.$refs.users.inputdisabled = true;
         this.$refs.users.getUserModel(row.id);
-      }, 10);
-
+        this.$refs.users.$refs['userinfo'].resetFields()
+      }, 0); 
       this.dialogVisible();
     },
     handleDelete(index, row) {
-      setTimeout(() => {
         this.$confirm("此操作将永久删除该用户, 是否继续?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
-        }).then(() => {  
-          this.$axios({
-            method: "delete", 
-            params:{ id:row.id },
-            url: "/api/UserSystem/deleteUser",
-            headers: { Authorization: "Bearer  " + getToken() }
-          }).then(res => {
+        }).then(() => { 
+          const params = {
+            id: row.id
+          };
+          users.userdelete(params).then(res => {
             if (res.status == 200) {
               if (res.data.verifiaction) {
                 this.$message({
@@ -103,61 +100,59 @@ export default {
                   type: "success",
                   duration: 2000
                 });
-                this.init(1);
+                this.init();
               }
             }
-          }); 
-        });
-      }, 10);
+          });
+        }); 
     },
     handlecurent(pageIndex) {
-      this.init(pageIndex);
+      this.currentpage=pageIndex
+      this.init();
     },
     onSearch() {
-      this.init(1);
-      this.closeWin();
+      this.currentpage=1
+      this.init();
     },
     showDialog() {
       setTimeout(() => {
-        this.$refs.users.userinfo.id = "";
-        this.$refs.users.userinfo.username = "";
-        this.$refs.users.userinfo.email = "";
-        this.$refs.users.userinfo.password = "";
-        this.$refs.users.userinfo.isLock = 0;
-        this.$refs.users.inputdisabled = false;
-      }, 10);
+         this.$refs.users.$refs['userinfo'].resetFields() 
+      }, 0);
+     
+
       this.dialogTableVisible = true;
     },
-    dialogVisible() { 
+    dialogVisible() {
       this.dialogTableVisible = true;
     },
     closeWin() {
       this.dialogTableVisible = false;
     },
-    init(pindex) {
-      this.$axios({
-        method: "get",
-        url: "/api/UserSystem/GetUserList",
-        params: {
-          pageIndex: pindex,
-          userName: this.userinfo.username
-        },
-        headers: { Authorization: "Bearer  " + getToken() }
-      }).then(res => {
-        if (res.status == 200) {
-          if (res.data.verifiaction) {
-            if (res.data.rows.total > 0) {
-              this.tableData = res.data.rows.items;
-              this.total = res.data.rows.total;
-              this.psize = res.data.rows.pagesize;
+    init() {
+      const param = {
+        pageIndex: this.currentpage,
+        userName: this.userinfo.username
+      };
+      
+        users.userlist(param)
+        .then(res => {
+          if (res.status == 200) {
+            if (res.data.verifiaction) {
+              if (res.data.rows.total > 0) {
+                this.tableData = res.data.rows.items;
+                this.total = res.data.rows.total;
+                this.psize = res.data.rows.pagesize;
+              }
             }
           }
-        }
-      });
+        })
+        .catch(erro => {
+          
+        });
     }
   },
   created() {
-    this.init(1);
+    this.init();
   }
 };
 </script>

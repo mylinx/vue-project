@@ -14,7 +14,7 @@
                     <i class="el-icon-arrow-down el-icon--right"></i>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="a">账号信息</el-dropdown-item>
+                    <el-dropdown-item command="a">{{ name }}</el-dropdown-item>
                     <el-dropdown-item command="loginout">退出登陆</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -32,7 +32,7 @@
             <el-breadcrumb-item>首页</el-breadcrumb-item>
             <el-breadcrumb-item>用户列表</el-breadcrumb-item>
             <el-breadcrumb-item>{{ name }}</el-breadcrumb-item>
-          </el-breadcrumb>
+          </el-breadcrumb>  
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -41,65 +41,61 @@
 </template>
 <script>
 import navbar from "./components/navbar";
-import { getToken,removeToken } from "@/until/auth";
+import { getToken, removeToken } from "@/until/auth";
+import { loginOut } from "@/api/login";
+import * as perssion from "@/api/perssion";
 export default {
   name: "layout",
   data() {
     return {
       absidHeight: window.innerHeight - 60,
-      name: ""
+      name: '',
+      levelList:''
     };
   },
   components: {
     navbar: navbar
   },
   created() {
-    //console.log(this.$store.getters.isShow1);
-    this.initMenu();
+     //this.initMenu();
   },
   mounted() {
-    // initMenu();
+    
   },
   methods: {
     childByValue: function(childValue) {
       // childValue就是子组件传过来的值
-      this.name = childValue;
+      //this.name = childValue;
     },
     handleCommand(command) {
       if (command == "a") {
         this.$router.push({ path: "/userinfo" });
       }
-      if(command=="loginout")
-      {
-           this.$axios({
-              method: "post",
-              url: "/api/Home/LoginOut",
-              params:{
-                uid:12
-              },
-              headers: { Authorization: "Bearer  " + getToken() }
-            }).then(res => {
-              if (res.status == 200) {
-                if (res.data.verifiaction) {
-                      removeToken();
-                      this.$router.push({path:'/'});
-                }
-              }
-            });
+      if (command == "loginout") {
+        loginOut(this.$store.getters.uid).then(res => {
+          if (res.data.verifiaction) {
+            removeToken();
+            this.$router.push({ path: "/" });
+          }
+        }).catch(erro=>{
+             removeToken();
+            this.$router.push({ path: "/" });
+        })
       }
     },
-    initMenu() {
-      this.$axios({
-        method: "get",
-        url: "/api/Routers/GetPersion",
-        headers: { Authorization: "Bearer  " + getToken() }
-      }).then(res => {
-        if (res.status == 200) {
-          if (res.data.verifiaction) {
-            //this.$store.commit("Add_Router", res.data.rows);
+    initMenu(){ 
+         perssion
+        .Getperssion()
+        .then(res => {
+          if (res.status == 200) {
+            if (res.data.verifiaction) {
+               this.$store.commit('SET_NAVBAR',res.data.rows)
+            }
           }
-        }
-      });
+        })
+        .catch(erro => {
+            console.log(erro);
+        })
     }
   },
   mounted() {
