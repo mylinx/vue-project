@@ -94,7 +94,7 @@ export default {
           }
         })
         .catch(erro => {
-            console.log(erro);
+            //console.log(erro);
         })
     }
   },

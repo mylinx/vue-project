@@ -37,7 +37,7 @@ export default [
             icon: 'el-icon-setting',
             roles: ['admin','kfadmin']
         }
-      },
+      }, 
       {
         path: '/roleslist',
         name: 'roleslist',
@@ -47,6 +47,11 @@ export default [
             icon: 'el-icon-setting',
             roles: ['admin','kfadmin']
         }
+      },
+      {
+        path: '/rolesedit',
+        name: 'rolesedit',
+        component:()=>{ return import('@/view/Layout/users/role_components/rolesedit') }
       },
       {
         path: '/test',

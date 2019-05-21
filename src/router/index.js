@@ -14,10 +14,10 @@ const routConfig = new Router({
   ], 
 })
  
+
 routConfig.beforeEach((to,from,next)=>{
-  
   if(getToken()=='' || getToken()==undefined)
-  {
+  { 
      if(to.path=='/')
       {
          next();
@@ -26,9 +26,11 @@ routConfig.beforeEach((to,from,next)=>{
           next({path:'/'})
       }
   }
-  else{
+  else{  
+    console.log(store)
     next();
   }
 })
+
 
 export default routConfig

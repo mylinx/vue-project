@@ -157,8 +157,7 @@ export default {
         .userdetails(params)
         .then(res => {
           if (res.status == 200) {
-            if (res.data.verifiaction) {
-              
+            if (res.data.verifiaction) { 
               this.userinfo.roleid = res.data.rows.roleid;
               this.userinfo.id = res.data.rows.id;
               this.userinfo.email = res.data.rows.email;
