@@ -3,7 +3,7 @@
  * @Author: zlx
  * @LastEditors: Please set LastEditors
  * @Date: 2019-05-07 09:29:12
- * @LastEditTime: 2019-05-08 09:47:14
+ * @LastEditTime: 2019-05-23 15:23:48
  */
 
 //token
@@ -18,11 +18,7 @@ export const token= state => {
 
 //导航
 export const navbar = state => {
-    if(state.navbar===null ||  state.navbar=== undefined)
-    {
-        state.navbar=JSON.parse(localStorage.getItem('navbar'))
-    }
-    return state.navbar
+    return state.navbar==null? localStorage.getItem('navbar'):state.navbar;
 }
 
 

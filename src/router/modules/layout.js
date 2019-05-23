@@ -9,7 +9,7 @@ export default [
        role:['admin','user']
     }
   },
-  {
+   {
     path: '/layout',
     name: 'layout',
     meta:{

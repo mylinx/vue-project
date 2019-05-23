@@ -20,19 +20,3 @@ new Vue({
   render: h => h(App)
 }) 
 
-router.beforeEach((to,from,next)=>{
-  if(getToken()=='' || getToken()==undefined)
-  { 
-     if(to.path=='/')
-      {
-         next();
-      }
-      else{
-          next({path:'/'})
-      }
-  }
-  else{  
-    console.log(store)
-    next();
-  }
-})

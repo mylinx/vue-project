@@ -11,27 +11,23 @@
     text-color="#fff"
     active-text-color="#ffd04b"
   >
-    <div v-for="item  in menulist" :key="item.Id">
-      <el-submenu v-if="item.TreeChildren==null?  false: true " :key="item.Id" :index="item.Id">
+    <div v-for="item  in menulist.filter(x=>x.ParentID===null||x.ParentID==='')" :key="item.ID"> 
+      <el-submenu  :key="item.ID" :index="item.ID">
         <template slot="title">
-          <i :class="item.Meta_icon==null? 'el-icon-news':item.Meta_icon"></i>
-          <span slot="title">{{ item.Name }}</span>
+          <i :class="item.Icon==null? 'el-icon-news':item.Icon"></i>
+          <span slot="title">{{ item.MenuName }}</span>
         </template>
-        <el-menu-item-group>
-          <el-menu-item
-            v-for="(c_value,  c_index)  in item.TreeChildren"
+        <el-menu-item-group  
+            v-for="(c_value,  c_index)  in menulist.filter(x=>x.ParentID != null||x.ParentID !='')"   
             :key="c_index"
-            :index="c_value.PathRouter"
-          >
-            <i :class="c_value.Meta_icon==null? 'el-icon-news':c_value.Meta_icon"></i>
-            {{ c_value.Name }}
+            v-if="item.ID===c_value.ParentID ? true:false"
+            >
+          <el-menu-item   :index="c_value.Router">
+            <i :class="c_value.Icon==null? 'el-icon-news':c_value.Icon"></i>
+            {{ c_value.MenuName }}
           </el-menu-item>
         </el-menu-item-group>
-      </el-submenu>
-      <el-menu-item :index="item.PathRouter" v-else>
-        <i class="el-icon-menu"></i>
-        <span slot="title">{{ item.Name}}</span>
-      </el-menu-item>
+      </el-submenu> 
     </div>
   </el-menu>
 </template>
@@ -52,7 +48,17 @@ export default {
       //this.$emit('childByValue',this.$router.history.current.meta.title );
     },
     initMenu() {
-      this.menulist = this.$store.getters.navbar; 
+      this.menulist=JSON.parse(this.$store.getters.navbar);
+      // const parents = JSON.parse(this.$store.getters.navbar).filter(
+      //   x => x.ParentID === null || x.ParentID === ""
+      // );
+      // const childrens = JSON.parse(this.$store.getters.navbar).filter(
+      //   x => x.ParentID != null || x.ParentID != ""
+      // );
+
+      // parents.forEach((value, index, item) => {
+      //   childrens.forEach((value, index, item) => {});
+      // });
     }
   },
   data() {

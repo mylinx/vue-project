@@ -16,20 +16,21 @@ const routConfig = new Router({
  
 
 routConfig.beforeEach((to,from,next)=>{
-  if(getToken()=='' || getToken()==undefined)
-  { 
-     if(to.path=='/')
-      {
-         next();
-      }
-      else{
-          next({path:'/'})
-      }
-  }
-  else{  
-    console.log(store)
     next();
-  }
+  // if(getToken()=='' || getToken()==undefined)
+  // { 
+  //    if(to.path=='/')
+  //     {
+  //        next();
+  //     }
+  //     else{
+  //         next({path:'/'})
+  //     }
+  // }
+  // else{  
+  //   console.log()
+  //   next();
+  // }
 })
 
 

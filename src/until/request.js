@@ -38,8 +38,8 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
       switch (error.response.status) {
          case 401:
             {
-               msg = "未授权,请重新登录!"
-               router.push('/');
+               //msg = "未授权,请重新登录!"
+               //router.push('/');
             }
       }
    }

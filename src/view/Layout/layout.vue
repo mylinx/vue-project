@@ -32,7 +32,7 @@
             <el-breadcrumb-item>首页</el-breadcrumb-item>
             <el-breadcrumb-item>用户列表</el-breadcrumb-item>
             <el-breadcrumb-item>{{ name }}</el-breadcrumb-item>
-          </el-breadcrumb>  
+          </el-breadcrumb>
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -44,24 +44,23 @@ import navbar from "./components/navbar";
 import { getToken, removeToken } from "@/until/auth";
 import { loginOut } from "@/api/login";
 import * as perssion from "@/api/perssion";
+import * as menu from "@/api/menu";
 export default {
   name: "layout",
   data() {
     return {
       absidHeight: window.innerHeight - 60,
-      name: '',
-      levelList:''
+      name: "",
+      levelList: ""
     };
   },
   components: {
     navbar: navbar
   },
   created() {
-     //this.initMenu();
+    this.initMenu();
   },
-  mounted() {
-    
-  },
+  mounted() {},
   methods: {
     childByValue: function(childValue) {
       // childValue就是子组件传过来的值
@@ -72,30 +71,32 @@ export default {
         this.$router.push({ path: "/userinfo" });
       }
       if (command == "loginout") {
-        loginOut(this.$store.getters.uid).then(res => {
-          if (res.data.verifiaction) {
+        loginOut(this.$store.getters.uid)
+          .then(res => {
+            if (res.data.verifiaction) {
+              removeToken();
+              this.$router.push({ path: "/" });
+            }
+          })
+          .catch(erro => {
             removeToken();
             this.$router.push({ path: "/" });
-          }
-        }).catch(erro=>{
-             removeToken();
-            this.$router.push({ path: "/" });
-        })
+          });
       }
     },
-    initMenu(){ 
-         perssion
-        .Getperssion()
-        .then(res => {
+    initMenu() {
+      menu
+        .getmenu()
+        .then(res => { 
           if (res.status == 200) {
-            if (res.data.verifiaction) {
-               this.$store.commit('SET_NAVBAR',res.data.rows)
+            if (res.data.Verifiaction) { 
+               this.$store.commit("SET_NAVBAR", res.data.Rows); 
             }
           }
         })
-        .catch(erro => {
-            //console.log(erro);
-        })
+        .then(erro => {
+
+        }); 
     }
   },
   mounted() {
